@@ -53,7 +53,13 @@ app.use('/DanhMuc', DanhMucRouter);
 app.use('/Img', ImgRouter);
 app.use('/SanPham', SanPhamRouter);
 app.use('/DonHang', DonHangRouter);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+  customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.18.2/swagger-ui.min.css',
+  customJs: [
+    'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.18.2/swagger-ui-bundle.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.18.2/swagger-ui-standalone-preset.js',
+  ],
+}));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
