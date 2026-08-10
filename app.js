@@ -17,7 +17,7 @@ require('./model/Img');
 require('./model/GioHang');
 
 var indexRouter = require('./routes/index');
-var ChiTietDonHangRouter = require('./routes/ChiTietDonHang_router');
+var ChiTietDonHangRouter = require('./routes/Chitietdonhang_router');
 var ReviewRouter = require('./routes/Review_router');
 var GioHangRouter = require('./routes/giohang_router');
 var DanhMucRouter = require('./routes/DanhMuc._router');
