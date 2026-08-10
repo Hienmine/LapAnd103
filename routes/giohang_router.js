@@ -3,6 +3,45 @@ var router = express.Router();
 var GioHang = require('../model/GioHang');
 const JWT = require('jsonwebtoken');
 
+/**
+ * @swagger
+ * /GioHang/GioHang_add:
+ *   post:
+ *     summary: Thêm sản phẩm vào giỏ hàng
+ *     tags: [GioHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               maKhachHang:
+ *                 type: string
+ *                 description: ID khách hàng.
+ *               maSanPham:
+ *                 type: string
+ *                 description: ID sản phẩm.
+ *               soLuong:
+ *                 type: number
+ *                 description: Số lượng sản phẩm.
+ *     responses:
+ *       201:
+ *         description: Thêm giỏ hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Lỗi khi thêm giỏ hàng.
+ */
 /* POST (add) */
 router.post('/GioHang_add', async function (req, res) {
   const { maKhachHang, maSanPham, soLuong } = req.body;
@@ -15,6 +54,46 @@ router.post('/GioHang_add', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /GioHang/GioHang_update:
+ *   put:
+ *     summary: Cập nhật giỏ hàng (cần đăng nhập)
+ *     tags: [GioHang]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               maSanPham:
+ *                 type: string
+ *                 description: ID sản phẩm mới.
+ *               soLuong:
+ *                 type: number
+ *                 description: Số lượng mới.
+ *     responses:
+ *       200:
+ *         description: Cập nhật giỏ hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       401:
+ *         description: Chưa đăng nhập.
+ *       403:
+ *         description: Token không hợp lệ.
+ */
 /* PUT (update) */
 router.put('/GioHang_update', async function (req, res) {
   const {  maSanPham, soLuong } = req.body;
@@ -45,6 +124,28 @@ router.put('/GioHang_update', async function (req, res) {
   }  
 });
 
+/**
+ * @swagger
+ * /GioHang/GioHang_delete:
+ *   delete:
+ *     summary: Xóa giỏ hàng
+ *     tags: [GioHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID giỏ hàng cần xóa.
+ *     responses:
+ *       200:
+ *         description: Xóa giỏ hàng thành công.
+ *       400:
+ *         description: Lỗi khi xóa.
+ */
 /* DELETE (delete) */
 router.delete('/GioHang_delete', async function (req, res) {
   const id = req.body.id || req.body;
@@ -56,6 +157,31 @@ router.delete('/GioHang_delete', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /GioHang/list_all:
+ *   get:
+ *     summary: Lấy danh sách tất cả giỏ hàng
+ *     tags: [GioHang]
+ *     responses:
+ *       200:
+ *         description: Danh sách giỏ hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy danh sách.
+ */
 /* GET list_all */
 router.get('/list_all', async function (req, res) {
   try {
@@ -66,6 +192,38 @@ router.get('/list_all', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /GioHang/GioHang_by_khachhang:
+ *   get:
+ *     summary: Tìm giỏ hàng theo khách hàng
+ *     tags: [GioHang]
+ *     parameters:
+ *       - in: query
+ *         name: maKhachHang
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID khách hàng cần tìm giỏ hàng.
+ *     responses:
+ *       200:
+ *         description: Danh sách giỏ hàng của khách hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy giỏ hàng.
+ */
 /* GET (search by maKhachHang) */
 router.get('/GioHang_by_khachhang', async function (req, res) {
   const { maKhachHang } = req.query;

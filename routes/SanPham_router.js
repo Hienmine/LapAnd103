@@ -7,14 +7,84 @@ var Review = require('../model/Review');
 var GioHang = require('../model/GioHang');
 var DonHang = require('../model/DonHang');
 const upload = require('../config/upload');
-/* post san pham */
-/* link api:http://localhost:3000/SanPham/SanPham-add */
+
+/**
+ * @swagger
+ * /SanPham/SanPham-add:
+ *   post:
+ *     summary: Thêm sản phẩm mới
+ *     tags: [SanPham]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tenSanPham:
+ *                 type: string
+ *                 description: Tên sản phẩm.
+ *               giaBan:
+ *                 type: number
+ *                 description: Giá bán sản phẩm.
+ *               moTa:
+ *                 type: string
+ *                 description: Mô tả sản phẩm.
+ *               Soluong:
+ *                 type: number
+ *                 description: Số lượng tồn kho.
+ *               danhMucId:
+ *                 type: string
+ *                 description: ID danh mục sản phẩm.
+ *     responses:
+ *       201:
+ *         description: Thêm sản phẩm thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.post('/SanPham-add', async function (req, res) {
   const { tenSanPham, giaBan, moTa, Soluong, danhMucId } = req.body;
   const newSanPham = { tenSanPham, giaBan, moTa, Soluong, danhMucId };
   await SanPham.create(newSanPham);
   res.status(201).json({ trangthai: true, message: 'thêm sản phẩm mới thành công' });
 });
+
+/**
+ * @swagger
+ * /SanPham/Sanpham_update:
+ *   put:
+ *     summary: Cập nhật sản phẩm
+ *     tags: [SanPham]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID sản phẩm cần cập nhật.
+ *     responses:
+ *       200:
+ *         description: Cập nhật sản phẩm thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.put('/Sanpham_update', async function (req, res) {
   const id = req.body;
   const findUser = await SanPham.findById(id); //tìm kiếm người dùng theo id
@@ -26,19 +96,111 @@ router.put('/Sanpham_update', async function (req, res) {
   }
 
 });
-/* Delete (delete sanpham) */
+
+/**
+ * @swagger
+ * /SanPham/sanpham_delete:
+ *   delete:
+ *     summary: Xóa sản phẩm
+ *     tags: [SanPham]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID sản phẩm cần xóa.
+ *     responses:
+ *       200:
+ *         description: Xóa sản phẩm thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.delete('/sanpham_delete', async function (req, res) {
   const Id = req.body;
   await SanPham.findByIdAndDelete(Id); //tìm kiếm người dùng theo id và xóa người dùng đó
   res.status(200).json({ trangthai: true, message: 'xóa người dùng thành công' });
 });
 
-/*search */
+/**
+ * @swagger
+ * /SanPham/list_all:
+ *   get:
+ *     summary: Lấy danh sách tất cả sản phẩm
+ *     tags: [SanPham]
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       tenSanPham:
+ *                         type: string
+ *                       giaBan:
+ *                         type: number
+ *                       moTa:
+ *                         type: string
+ *                       Soluong:
+ *                         type: number
+ *                       danhMucId:
+ *                         type: string
+ */
 router.get('/list_all', async function (req, res) {
   const list = await SanPham.find();
   res.status(200).json({ noidung: true, message: 'lấy được tất cả người dùng', data: list });
 })
 
+/**
+ * @swagger
+ * /SanPham/sanpham_one:
+ *   get:
+ *     summary: Tìm sản phẩm theo tên
+ *     tags: [SanPham]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Tên sản phẩm cần tìm.
+ *     responses:
+ *       200:
+ *         description: Thông tin sản phẩm.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */
 //query trả về giá trị http://localhost:3000/user/user_one/name(key)?name=Lê Văn A(value)
 router.get('/sanpham_one', async function (req, res) {
   const { name } = req.query
@@ -100,6 +262,36 @@ router.get('/sanpham_one', async function (req, res) {
 //   }
 // });
 
+/**
+ * @swagger
+ * /SanPham/addImg:
+ *   post:
+ *     summary: Upload một ảnh sản phẩm
+ *     tags: [SanPham]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               img:
+ *                 type: string
+ *                 format: binary
+ *                 description: File ảnh cần upload.
+ *     responses:
+ *       200:
+ *         description: Upload thành công hoặc thất bại.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                 url:
+ *                   type: string
+ */
 /* single upload */
 router.post('/addImg', [upload.single('img')], async (req, res,next) => {
   try {
@@ -115,7 +307,41 @@ router.post('/addImg', [upload.single('img')], async (req, res,next) => {
     return res.json({status: 0, link : "" });
   }
   });
-  
+
+/**
+ * @swagger
+ * /SanPham/addImgs:
+ *   post:
+ *     summary: Upload nhiều ảnh sản phẩm (tối đa 9)
+ *     tags: [SanPham]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               img:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Các file ảnh cần upload (tối đa 9).
+ *     responses:
+ *       200:
+ *         description: Upload thành công hoặc thất bại.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                 links:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ */
 /* multi upload */
 router.post('/addImgs', [upload.array('img', 9)], async (req, res,next) => {
   try {
@@ -151,6 +377,71 @@ router.post('/addImgs', [upload.array('img', 9)], async (req, res,next) => {
 // API Lọc chi tiết đơn hàng theo giá: Lấy các chi tiết đơn hàng có gia > 200000 hoặc so_luong >= 2.
 // API Lọc đánh giá chất lượng cao: Lấy danh sách đánh giá có so_sao >= 4 của một sản phẩm.
 // API Lọc người dùng theo thời gian: Lấy danh sách tài khoản có ngay_tao lớn hơn mốc thời gian cụ thể và trang_thai = 1
+/**
+ * @swagger
+ * /SanPham/list_all_loc:
+ *   get:
+ *     summary: Lọc sản phẩm nâng cao
+ *     tags: [SanPham]
+ *     parameters:
+ *       - in: query
+ *         name: price
+ *         schema:
+ *           type: number
+ *         description: Giá bán để lọc.
+ *       - in: query
+ *         name: quantity
+ *         schema:
+ *           type: number
+ *         description: Số lượng để lọc.
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Tên sản phẩm để lọc.
+ *       - in: query
+ *         name: priceMin
+ *         schema:
+ *           type: number
+ *         description: Giá tối thiểu.
+ *       - in: query
+ *         name: priceMax
+ *         schema:
+ *           type: number
+ *         description: Giá tối đa.
+ *       - in: query
+ *         name: ngaytao
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Ngày tạo để lọc.
+ *       - in: query
+ *         name: trangthai
+ *         schema:
+ *           type: number
+ *         description: Trạng thái để lọc.
+ *       - in: query
+ *         name: soSao
+ *         schema:
+ *           type: number
+ *         description: Số sao tối thiểu.
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm đã lọc.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */
 router.get('/list_all_loc', async function (req, res) {
   const { price, quantity, name,priceMin,priceMax,ngaytao,trangthai,soSao, } = req.query;
   const parentId = req.query.parentId0

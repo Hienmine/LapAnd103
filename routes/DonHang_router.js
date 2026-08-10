@@ -2,6 +2,48 @@ var express = require('express');
 var router = express.Router();
 var DonHang = require('../model/DonHang');
 
+/**
+ * @swagger
+ * /DonHang/DonHang_add:
+ *   post:
+ *     summary: Thêm đơn hàng mới
+ *     tags: [DonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               maKhachHang:
+ *                 type: string
+ *                 description: ID khách hàng.
+ *               maSanPham:
+ *                 type: string
+ *                 description: ID sản phẩm.
+ *               soLuong:
+ *                 type: number
+ *                 description: Số lượng sản phẩm.
+ *               tongTien:
+ *                 type: number
+ *                 description: Tổng tiền đơn hàng.
+ *     responses:
+ *       201:
+ *         description: Thêm đơn hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Lỗi khi thêm đơn hàng.
+ */
 /* POST (add) */
 router.post('/DonHang_add', async function (req, res) {
   const { maKhachHang, maSanPham, soLuong, tongTien } = req.body;
@@ -14,6 +56,48 @@ router.post('/DonHang_add', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /DonHang/DonHang_update:
+ *   put:
+ *     summary: Cập nhật đơn hàng
+ *     tags: [DonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID đơn hàng cần cập nhật.
+ *               maKhachHang:
+ *                 type: string
+ *                 description: ID khách hàng mới.
+ *               soLuong:
+ *                 type: number
+ *                 description: Số lượng mới.
+ *               giaBan:
+ *                 type: number
+ *                 description: Giá bán mới.
+ *     responses:
+ *       200:
+ *         description: Cập nhật đơn hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Lỗi khi cập nhật.
+ */
 /* PUT (update) */
 router.put('/DonHang_update', async function (req, res) {
   const { id, maKhachHang, soLuong, giaBan } = req.body;
@@ -33,6 +117,28 @@ router.put('/DonHang_update', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /DonHang/DonHang_delete:
+ *   delete:
+ *     summary: Xóa đơn hàng
+ *     tags: [DonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID đơn hàng cần xóa.
+ *     responses:
+ *       200:
+ *         description: Xóa đơn hàng thành công.
+ *       400:
+ *         description: Lỗi khi xóa.
+ */
 /* DELETE (delete) */
 router.delete('/DonHang_delete', async function (req, res) {
   const id = req.body.id || req.body;
@@ -44,6 +150,31 @@ router.delete('/DonHang_delete', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /DonHang/list_all:
+ *   get:
+ *     summary: Lấy danh sách tất cả đơn hàng
+ *     tags: [DonHang]
+ *     responses:
+ *       200:
+ *         description: Danh sách đơn hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy danh sách.
+ */
 /* GET list_all */
 router.get('/list_all', async function (req, res) {
   try {
@@ -54,6 +185,38 @@ router.get('/list_all', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /DonHang/DonHang_by_khachhang:
+ *   get:
+ *     summary: Tìm đơn hàng theo khách hàng
+ *     tags: [DonHang]
+ *     parameters:
+ *       - in: query
+ *         name: maKhachHang
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID khách hàng cần tìm đơn hàng.
+ *     responses:
+ *       200:
+ *         description: Danh sách đơn hàng của khách hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy đơn hàng.
+ */
 /* GET (search by maKhachHang) */
 router.get('/DonHang_by_khachhang', async function (req, res) {
   const { maKhachHang } = req.query;

@@ -2,6 +2,42 @@ var express = require('express');
 var router = express.Router();
 var ChiTietDonHang = require('../model/ChiTietDonHang');
 
+/**
+ * @swagger
+ * /ChiTietDonHang/ChiTietDonHang_add:
+ *   post:
+ *     summary: Thêm chi tiết đơn hàng
+ *     tags: [ChiTietDonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               maDonHang:
+ *                 type: string
+ *                 description: ID đơn hàng.
+ *               maSanPham:
+ *                 type: string
+ *                 description: ID sản phẩm.
+ *     responses:
+ *       201:
+ *         description: Thêm chi tiết đơn hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Lỗi khi thêm chi tiết đơn hàng.
+ */
 /* POST (add) */
 router.post('/ChiTietDonHang_add', async function (req, res) {
   const { maDonHang, maSanPham } = req.body;
@@ -14,6 +50,45 @@ router.post('/ChiTietDonHang_add', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /ChiTietDonHang/ChiTietDonHang_update:
+ *   put:
+ *     summary: Cập nhật chi tiết đơn hàng
+ *     tags: [ChiTietDonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID chi tiết đơn hàng cần cập nhật.
+ *               maDonHang:
+ *                 type: string
+ *                 description: ID đơn hàng mới.
+ *               maSanPham:
+ *                 type: string
+ *                 description: ID sản phẩm mới.
+ *     responses:
+ *       200:
+ *         description: Cập nhật chi tiết đơn hàng thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trangthai:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Lỗi khi cập nhật.
+ */
 /* PUT (update) */
 router.put('/ChiTietDonHang_update', async function (req, res) {
   const { id, maDonHang, maSanPham } = req.body;
@@ -32,6 +107,28 @@ router.put('/ChiTietDonHang_update', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /ChiTietDonHang/ChiTietDonHang_delete:
+ *   delete:
+ *     summary: Xóa chi tiết đơn hàng
+ *     tags: [ChiTietDonHang]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID chi tiết đơn hàng cần xóa.
+ *     responses:
+ *       200:
+ *         description: Xóa chi tiết đơn hàng thành công.
+ *       400:
+ *         description: Lỗi khi xóa.
+ */
 /* DELETE (delete) */
 router.delete('/ChiTietDonHang_delete', async function (req, res) {
   const id = req.body.id || req.body;
@@ -43,6 +140,31 @@ router.delete('/ChiTietDonHang_delete', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /ChiTietDonHang/list_all:
+ *   get:
+ *     summary: Lấy danh sách tất cả chi tiết đơn hàng
+ *     tags: [ChiTietDonHang]
+ *     responses:
+ *       200:
+ *         description: Danh sách chi tiết đơn hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy danh sách.
+ */
 /* GET list_all */
 router.get('/list_all', async function (req, res) {
   try {
@@ -53,6 +175,38 @@ router.get('/list_all', async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /ChiTietDonHang/ChiTietDonHang_by_donhang:
+ *   get:
+ *     summary: Tìm chi tiết đơn hàng theo mã đơn hàng
+ *     tags: [ChiTietDonHang]
+ *     parameters:
+ *       - in: query
+ *         name: maDonHang
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID đơn hàng cần tìm.
+ *     responses:
+ *       200:
+ *         description: Danh sách chi tiết đơn hàng.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 noidung:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Lỗi khi lấy chi tiết đơn hàng.
+ */
 /* GET (search by maDonHang) */
 router.get('/ChiTietDonHang_by_donhang', async function (req, res) {
   const { maDonHang } = req.query;
