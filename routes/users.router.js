@@ -11,6 +11,7 @@ const path = require('path');
  * /user/user_add:
  *   post:
  *     summary: Thêm người dùng mới
+ *     tags: [User]
  *     description: Thêm một người dùng mới vào hệ thống.
  *     requestBody:
  *       required: true
@@ -84,6 +85,7 @@ router.post('/user_add', async function (req, res) {
  * /user/user_update:
  *   put:
  *     summary: Cập nhật thông tin người dùng
+ *     tags: [User]
  *     description: Cập nhật thông tin người dùng dựa trên ID.
  *     requestBody:
  *       required: true
@@ -137,6 +139,7 @@ router.put('/user_update', async function (req, res) {
  * /user/delete:
  *   delete:
  *     summary: Xóa người dùng
+ *     tags: [User]
  *     description: Xóa người dùng theo ID.
  *     requestBody:
  *       required: true
@@ -173,6 +176,7 @@ router.delete('/user_delete', async function (req, res) {
  * /user/list_all:
  *   get:
  *     summary: Lấy danh sách tất cả người dùng
+ *     tags: [User]
  *     description: Trả về danh sách tất cả người dùng.
  *     responses:
  *       200:
@@ -210,6 +214,7 @@ router.get('/list_all', async function (req, res) {
  * /user/user_one:
  *   get:
  *     summary: Lấy thông tin người dùng theo tên
+ *     tags: [User]
  *     description: Trả về thông tin người dùng dựa trên tham số name được cung cấp.
  *     parameters:
  *       - in: query
@@ -338,6 +343,7 @@ router.get('/user_one', async function (req, res) {
  * /user/send-email:
  *   post:
  *     summary: Gửi email
+ *     tags: [User]
  *     description: Gửi email với tiêu đề và nội dung được cung cấp.
  *     requestBody:
  *       required: true
@@ -421,6 +427,7 @@ router.post('/send-email', async (req, res) => {
  * /user/login:
  *   post:
  *     summary: Đăng nhập người dùng
+ *     tags: [User]
  *     description: Đăng nhập người dùng bằng username, email và password.
  *     requestBody:
  *       required: true
