@@ -58,18 +58,23 @@ const path = require('path');
  *                   description: Thông báo kết quả.
  */
 router.post('/user_add', async function (req, res) {
-  const { username, password, email, Sdt, GioiTinh, NgaySinh, DiaChi } = req.body;
-  const newUser = {
-    username,
-    password,
-    email,
-    Sdt,
-    GioiTinh,
-    NgaySinh,
-    DiaChi
-  };
-  await User.create(newUser);
-  res.status(200).json({ trangthai: true, message: 'thêm người dùng mới thành công' });
+  try {
+    const { username, password, email, Sdt, GioiTinh, NgaySinh, DiaChi } = req.body;
+    const newUser = {
+      username,
+      password,
+      email,
+      Sdt,
+      GioiTinh,
+      NgaySinh,
+      DiaChi
+    };
+    await User.create(newUser);
+    res.status(200).json({ trangthai: true, message: 'thêm người dùng mới thành công' });
+  } catch (error) {
+    console.error("Lỗi khi thêm người dùng:", error);
+    res.status(400).json({ trangthai: false, message: 'Thêm người dùng thất bại: ' + error.message });
+  }
 });
 /* Put (update user) */
 //router.put('/user_update/', async function(req, res) {
@@ -117,23 +122,27 @@ router.post('/user_add', async function (req, res) {
  *                 format: date
  */
 router.put('/user_update', async function (req, res) {
-  const { id, username, password, email, Sdt, GioiTinh, NgaySinh, DiaChi } = req.body;
-  const findUser = await User.findById(id); //tìm kiếm người dùng theo id
-  if (findUser) {
-    findUser.username = username;
-    findUser.password = password;
-    findUser.email = email;
-    findUser.Sdt = Sdt;
-    findUser.GioiTinh = GioiTinh;
-    findUser.NgaySinh = NgaySinh;
-    findUser.DiaChi = DiaChi;
-    await findUser.save();
-    res.status(200).json({ trangthai: true, message: 'Cập nhật người dùng thành công' }); //nếu findUser tồn tại thì cập nhật thông tin người dùng và trả về thông báo thành công
-  } else {
-    return res.status(200).json({ trangthai: false, message: 'Người dùng không tồn tại' }); //nếu findUser null trả về thông báo người dùng không tồn tại
+  try {
+    const { id, username, password, email, Sdt, GioiTinh, NgaySinh, DiaChi } = req.body;
+    const findUser = await User.findById(id); //tìm kiếm người dùng theo id
+    if (findUser) {
+      findUser.username = username;
+      findUser.password = password;
+      findUser.email = email;
+      findUser.Sdt = Sdt;
+      findUser.GioiTinh = GioiTinh;
+      findUser.NgaySinh = NgaySinh;
+      findUser.DiaChi = DiaChi;
+      await findUser.save();
+      res.status(200).json({ trangthai: true, message: 'Cập nhật người dùng thành công' });
+    } else {
+      return res.status(200).json({ trangthai: false, message: 'Người dùng không tồn tại' });
+    }
+  } catch (error) {
+    res.status(400).json({ trangthai: false, message: 'Lỗi cập nhật: ' + error.message });
   }
-
 });
+
 /** 
  * @swagger
  * /user/delete:
@@ -167,9 +176,13 @@ router.put('/user_update', async function (req, res) {
  *                   description: Thông báo kết quả.
  */
 router.delete('/user_delete', async function (req, res) {
-  const userId = req.body;
-  await User.findByIdAndDelete(userId); //tìm kiếm người dùng theo id và xóa người dùng đó
-  res.status(200).json({ trangthai: true, message: 'xóa người dùng thành công' });
+  try {
+    const userId = req.body.id;
+    await User.findByIdAndDelete(userId); //tìm kiếm người dùng theo id và xóa người dùng đó
+    res.status(200).json({ trangthai: true, message: 'xóa người dùng thành công' });
+  } catch (error) {
+    res.status(400).json({ trangthai: false, message: 'Lỗi xóa người dùng: ' + error.message });
+  }
 });
 /** 
  * @swagger
@@ -206,8 +219,12 @@ router.delete('/user_delete', async function (req, res) {
  */
 /*search */
 router.get('/list_all', async function (req, res) {
-  const list = await User.find({},{username,email});
-  res.status(200).json({ noidung: true, message: 'lấy được tất cả người dùng', data: list });
+  try {
+    const list = await User.find({}, "username email");
+    res.status(200).json({ noidung: true, message: 'lấy được tất cả người dùng', data: list });
+  } catch (error) {
+    res.status(400).json({ noidung: false, message: 'Lỗi lấy danh sách: ' + error.message });
+  }
 })
 /** 
  * @swagger
